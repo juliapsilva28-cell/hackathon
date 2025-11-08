@@ -1,13 +1,23 @@
 package com.mindat5c.backend.controller;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.mindat5c.backend.model.CheckIn;
 import com.mindat5c.backend.model.CheckInResponse;
 import com.mindat5c.backend.model.Resource;
 import com.mindat5c.backend.model.Stats;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.Instant;
-import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -108,7 +118,7 @@ public class WellnessController {
             ));
             resources.add(new Resource(
                 "Dick's House Counseling",
-                "https://students.dartmouth.edu/health-service/counseling",
+                "https://students.dartmouth.edu/health-service/about/get-help-now",
                 true,
                 null
             ));
@@ -117,13 +127,13 @@ public class WellnessController {
         if (checkIn.getNutrition() <= 5) {
             resources.add(new Resource(
                 "Nutrition Counseling",
-                "https://students.dartmouth.edu/health-service/nutrition",
+                "https://students.dartmouth.edu/health-service/primary-care/services/nutrition-eating-well-dartmouth/nutritional-wellness-team",
                 true,
                 "Poor nutrition detected"
             ));
             resources.add(new Resource(
                 "FOCO/DDS Healthy Menus",
-                "https://nutrition.dartmouth.edu/menus",
+                "https://menu.dartmouth.edu/todaysmenu",
                 false,
                 null
             ));
@@ -138,7 +148,7 @@ public class WellnessController {
             ));
             resources.add(new Resource(
                 "DOC Outdoor Trips",
-                "https://outdoors.dartmouth.edu/trips",
+                "https://doc.dartmouth.edu/welcome",
                 false,
                 null
             ));
@@ -147,7 +157,7 @@ public class WellnessController {
         // Always show general resources
         resources.add(new Resource(
             "Campus Events (Collis)",
-            "https://collis.dartmouth.edu/events",
+            "https://students.dartmouth.edu/collis/about/get-involved",
             false,
             null
         ));
