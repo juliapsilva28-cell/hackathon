@@ -1,0 +1,184 @@
+<div class="app-container">
+  <!-- Header with gradient -->
+  <header class="header-gradient">
+    <h1>🧠 Mind&#64;5C</h1>
+    <p>Your 60-second wellness check-in</p>
+  </header>
+
+  <main class="main-content">
+    <!-- Check-in Form -->
+    <section class="form-section">
+      <h2>How are you feeling today?</h2>
+
+      <div class="slider-group">
+        <div class="slider-item">
+          <label for="sleep">
+            <span class="emoji">😴</span>
+            <span class="label-text">Sleep quality</span>
+          </label>
+          <div class="slider-container">
+            <input
+              type="range"
+              id="sleep"
+              min="1"
+              max="10"
+              [(ngModel)]="checkIn.sleep"
+              [disabled]="isSubmitting"
+              aria-label="Rate your sleep quality from 1 to 10"
+              class="slider">
+            <span class="slider-value">{{ checkIn.sleep }}</span>
+          </div>
+        </div>
+
+        <div class="slider-item">
+          <label for="nutrition">
+            <span class="emoji">🥗</span>
+            <span class="label-text">Healthy eating</span>
+          </label>
+          <div class="slider-container">
+            <input
+              type="range"
+              id="nutrition"
+              min="1"
+              max="10"
+              [(ngModel)]="checkIn.nutrition"
+              [disabled]="isSubmitting"
+              aria-label="Rate your healthy eating from 1 to 10"
+              class="slider">
+            <span class="slider-value">{{ checkIn.nutrition }}</span>
+          </div>
+        </div>
+
+        <div class="slider-item">
+          <label for="stress">
+            <span class="emoji">😰</span>
+            <span class="label-text">Stress level</span>
+          </label>
+          <div class="slider-container">
+            <input
+              type="range"
+              id="stress"
+              min="1"
+              max="10"
+              [(ngModel)]="checkIn.stress"
+              [disabled]="isSubmitting"
+              aria-label="Rate your stress level from 1 to 10"
+              class="slider">
+            <span class="slider-value">{{ checkIn.stress }}</span>
+          </div>
+        </div>
+
+        <div class="slider-item">
+          <label for="activity">
+            <span class="emoji">🏃</span>
+            <span class="label-text">Physical activity</span>
+          </label>
+          <div class="slider-container">
+            <input
+              type="range"
+              id="activity"
+              min="1"
+              max="10"
+              [(ngModel)]="checkIn.activity"
+              [disabled]="isSubmitting"
+              aria-label="Rate your physical activity from 1 to 10"
+              class="slider">
+            <span class="slider-value">{{ checkIn.activity }}</span>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="submit-button"
+        (click)="submitCheckIn()"
+        [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Submitting...' : 'Submit Check-in' }}
+      </button>
+
+      <div class="message-area">
+        <div *ngIf="showSuccess" class="success-message" role="alert" aria-live="polite">
+          ✓ {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="error-message" role="alert">
+          {{ errorMessage }}
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Panel -->
+    <section class="stats-section">
+      <h2 class="stats-title">
+        📊 Community Pulse: {{ stats.communityPulse }} / 100
+      </h2>
+      <p class="stats-subtitle">
+        Based on {{ stats.count }} anonymous check-in{{ stats.count !== 1 ? 's' : '' }}
+      </p>
+
+      <div class="stats-grid" *ngIf="stats.count > 0">
+        <div class="stat-item">
+          <span class="stat-emoji">😴</span>
+          <span class="stat-label">Avg Sleep</span>
+          <span class="stat-value">{{ formatAverage(stats.avgSleep) }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-emoji">🥗</span>
+          <span class="stat-label">Avg Nutrition</span>
+          <span class="stat-value">{{ formatAverage(stats.avgNutrition) }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-emoji">😰</span>
+          <span class="stat-label">Avg Stress</span>
+          <span class="stat-value">{{ formatAverage(stats.avgStress) }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-emoji">🏃</span>
+          <span class="stat-label">Avg Activity</span>
+          <span class="stat-value">{{ formatAverage(stats.avgActivity) }}</span>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="stats.count === 0">
+        <p>Be the first to check in!</p>
+      </div>
+    </section>
+
+    <!-- Personalized Resources -->
+    <section class="resources-section" *ngIf="resources.length > 0">
+      <h2>🎯 Recommended For You</h2>
+
+      <div class="resource-list">
+        <div
+          *ngFor="let resource of resources"
+          class="resource-item"
+          [class.priority]="resource.priority"
+          (click)="openResource(resource.url)">
+          <span class="resource-icon" *ngIf="resource.priority">⚠️</span>
+          <div class="resource-content">
+            <span class="resource-label">{{ resource.label }}</span>
+            <span class="resource-reason" *ngIf="resource.reason">({{ resource.reason }})</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- All Resources -->
+    <section class="all-resources-section">
+      <h3>🔗 All Campus Resources</h3>
+      <p class="resource-links">
+        <a href="https://students.dartmouth.edu/wellness-center" target="_blank">SWC</a> ·
+        <a href="https://students.dartmouth.edu/health-service" target="_blank">Dick's House</a> ·
+        <a href="https://recreation.dartmouth.edu" target="_blank">Alumni Gym</a> ·
+        <a href="https://outdoors.dartmouth.edu" target="_blank">DOC</a> ·
+        <a href="https://nutrition.dartmouth.edu" target="_blank">FOCO/DDS</a> ·
+        <a href="https://collis.dartmouth.edu" target="_blank">Collis Events</a>
+      </p>
+    </section>
+
+    <!-- Admin Seed Button -->
+    <div class="admin-section" *ngIf="showAdminButton">
+      <button class="seed-button" (click)="seedData()">
+        Seed Sample Data (Demo)
+      </button>
+    </div>
+  </main>
+</div>
